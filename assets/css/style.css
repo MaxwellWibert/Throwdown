@@ -1,0 +1,10 @@
+.jumbotron{
+	text-align: center;
+	font-family: Helvetica, "Helvetica Nueu", Arial, "Sans Serif";
+}
+
+.pad-wrapper{
+	background-color: transparent;
+	border-radius: 10px;
+	padding: 5px;
+}

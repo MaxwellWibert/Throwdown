@@ -9,7 +9,7 @@ function windowResized() {
 function setup() {
   canvas = createCanvas(windowWidth, windowHeight);
   canvas.position(0,0);
-  canvas.style('z-index', '1');
+  canvas.style('z-index', '-1');
   colorMode(HSB);
   gravity = createVector(0, 0.2);
   stroke(255);
@@ -26,7 +26,7 @@ function mousePressed(){
 
 function draw() {
   colorMode(RGB);
-  background(0, 0, 0, 25);
+  background(0,0,0,10);
   
   for (var i = fireworks.length - 1; i>=0; i--){
     fireworks[i].update();
