@@ -1,9 +1,15 @@
 var fireworks = [];
-
+var canvas;
 var gravity;
 
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
+
 function setup() {
-  createCanvas(800, 400);
+  canvas = createCanvas(windowWidth, windowHeight);
+  canvas.position(0,0);
+  canvas.style('z-index', '1');
   colorMode(HSB);
   gravity = createVector(0, 0.2);
   stroke(255);
