@@ -17,6 +17,18 @@ canvas{
 	border-width: 2px;
 	border-radius: 10px;
 	background: lemonchiffon;
+	height: 100px;
+	padding-bottom: 10px;
+}
+
+h1{
+	position: absolute;
+	top: 0;
+	right: 10%;
+	left: 10%;
+	padding: 0;
+
+	text-align: center;
 }
 
 .pad-wrapper{
@@ -75,4 +87,8 @@ canvas{
 	height: 100%;
 	box-shadow: 1px 2px 1px #444444;
 	text-align: center;
+}
+
+#my-field{
+	margin-top: 200px;
 }

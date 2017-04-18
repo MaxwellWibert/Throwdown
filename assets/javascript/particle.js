@@ -39,13 +39,15 @@ function Particle(x, y, hue, firework, swirly){
   
   this.show = function(){
     colorMode(HSB);
-    if(!this.firework){
-      strokeWeight(2);
-      stroke(hue, 255, 255, this.lifespan);
-    }else{
+    if(this.firework){
       strokeWeight(4);
       stroke(hue, 255, 255);
-    }
+    }else if(this.swirly){
+      strokeWeight(20-this.radius);
+    }else{
+      strokeWeight(2);
+      stroke(hue, 255, 255, this.lifespan);
+    }  
     point(this.pos.x, this.pos.y);
   }
 }

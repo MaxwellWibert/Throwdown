@@ -1,7 +1,6 @@
 $(document).ready(function(){
 	var me;
 	var opponent;
-	var myTurn = false;
 
 	//constructor for players
 	function Player(Deck, image){
@@ -125,7 +124,7 @@ $(document).ready(function(){
 	//user chooses player
 	console.log(rick, morty);
 
-	var choice = confirm("Press OK for Rick, Press cancel for morty");
+	var choice = confirm("Press OK for Rick, Press Cancel for morty");
 	if(choice){
 		me = rick;
 		opponent = morty;
@@ -162,7 +161,20 @@ $(document).ready(function(){
 	opponentElements[2] = $("#opponent-3");
 	opponentElements[3] = $("#opponent-4");
 
+	function myTurn(){		
+		display();
+		myPlace();
+		myAttack();
+		display();
+		if(opponent.health <= 0){
+			onGameWin();
+		}else{
+			opponentTurn();
+		}
+	}
+
 	display();
+	myTurn();
 
 
 	function displayHand(){
@@ -225,24 +237,13 @@ $(document).ready(function(){
 		displayHand();
 	}
 
-	function myTurn(){
-		display();
-		myPlace();
-		myAttack();
-		display();
-		if(opponent.health <= 0){
-			onGameWin();
-		}else{
-			opponentTurn();
-		}
-	}
 
 	function opponentTurn(){
 		display();
 		opponentPlace();
 		opponentAttack();
 		display();
-		if(my.health <= 0){
+		if(me.health <= 0){
 			onGameLose();
 		}else{
 			myTurn();
@@ -259,7 +260,18 @@ $(document).ready(function(){
 	}
 
 	function myPlace(){
-
+		for(var i = 0; i<4; i++){
+			handElements[i].draggable({revert: "invalid"});
+			fieldElements[i].droppable({
+				classes:{
+					"ui-droppable-active": "ui-state-active",
+					"ui-droppable-hover": "ui-state-hover"
+				},
+				drop: function(event, ui){
+					console.log($(this));
+				}
+			});
+		}
 	}
 
 	function opponentPlace(){
@@ -267,11 +279,54 @@ $(document).ready(function(){
 	}
 
 	function myAttack(){
-
+		for(var i = 0; i<4; i++){
+			var myCard = me.field[i];
+			var opponentCard = opponent.field[i];
+			if(myCard !== null && myCard !== undefined){
+				var position = myCard.offset();
+				myAnimation(position.left, position.top);
+				setTimeOut(myAnimation(position.left, position.top),300);
+				setTimeOut(myAnimation(position.left, position.top),300);
+				if(opponentCard != null){
+					opponentCard.health -= myCard.attack;
+					if(opponentCard.health <= 0){
+						opponent.health += opponentCard.health;
+						opponent.field[i] = null;
+					}
+				}else{
+					opponent.health -= myCard.attack;
+				}
+			}
+		}
 	}
 
 	function opponentAttack(){
-		
+		for(var i = 0; i<4; i++){
+			var myCard = me.field[i];
+			var opponentCard = opponent.field[i];
+			if(opponentCard != null){
+				var position = opponentCard.offset();
+				myAnimation(position.left, position.top);
+				setTimeOut(myAnimation(position.left, position.top),300);
+				setTimeOut(myAnimation(position.left, position.top),300);
+				if(myCard != null){
+					myCard.health -= opponentCard.attack;
+					if(myCard.health <= 0){
+						me.health += myCard.health;
+						me.field[i] = null;
+					}
+				}else{
+					me.health -= opponentCard.attack;
+				}
+			}
+		}	
+	}
+
+	function myAnimation(x, y){
+		colorMode(RGB);
+  		background(0, 0, 0, 25);
+  		var mySwirl = new Swirly(x, y);
+  		fireworks.push(mySwirl);
 	}
 });
 
