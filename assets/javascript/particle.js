@@ -6,12 +6,12 @@ function Particle(x, y, hue, firework, swirly){
   this.acc = createVector(0,0);
   
   if (this.firework) {
-    this.vel = createVector(0, -8);
+    this.vel = createVector(0, -10);
   } else if(this.swirly){
     this.vel = 0;
   } else {
     this.vel = p5.Vector.random2D();
-    this.vel.mult(random(8,16));
+    this.vel.mult(random(10,20));
   }
   
   this.applyForce = function(force){
