@@ -192,7 +192,9 @@ $(document).ready(function(){
 				overlay.html('<h4>' + me.hand[i].name + '</h4> <p>Health: ' +me.hand[i].health + ' Attack: ' + me.hand[i].attack + '</p>');
 				background.append(overlay);
 			}else{
-				//background.html('<h4> Empty Slot </h4>');
+				var overlay = $('<div class="placeholder">');
+				overlay.html('<h4>My Hand</h4>');
+				background.append(overlay);
 			}
 			handElements[i].append(background);
 		}
@@ -208,8 +210,9 @@ $(document).ready(function(){
 				overlay.html('<h4>' + me.field[i].name + '</h4> <p>Health: ' +me.field[i].health + ' Attack: ' + me.field[i].attack + '</p>');
 				background.append(overlay);
 			}else{
-				//console.log(i);
-				//background.html('<h4> Empty Slot </h4>');
+				var overlay = $('<div class="placeholder">');
+				overlay.html('<h4>My Field</h4>');
+				background.append(overlay);
 			}
 			fieldElements[i].append(background);
 		}
@@ -225,8 +228,9 @@ $(document).ready(function(){
 				overlay.html('<h4>' + opponent.field[i].name + '</h4> <p>Health: ' + opponent.field[i].health + ' Attack: ' + opponent.field[i].attack + '</p>');
 				background.append(overlay);
 			}else{
-				console.log(i);
-				background.html('<h4> Empty Slot </h4>');
+				var overlay = $('<div class="placeholder">');
+				overlay.html('<h4>Opponent Field</h4>');
+				background.append(overlay);
 			}
 			opponentElements[i].append(background);
 		}
