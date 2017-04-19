@@ -17,13 +17,6 @@ function setup() {
   background(0);
 }
 
-function mousePressed(){
-  colorMode(RGB);
-  background(0, 0, 0, 25);
-  var mySwirl = new Swirly(mouseX,mouseY);
-  fireworks.push(mySwirl);
-}
-
 function draw() {
   colorMode(RGB);
   background(0,0,0,10);

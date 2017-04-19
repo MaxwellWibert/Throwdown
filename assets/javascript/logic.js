@@ -240,32 +240,13 @@ $(document).ready(function(){
 
 	function myPlace(){
 		for(var i = 0; i<4; i++){
-			$("#hand-" + (i + 1) + " .background").draggable({revert: "invalid", snap: "ui-widget-header"});
-			fieldElements[i].droppable({
-				classes:{
-					"ui-droppable-active": "ui-state-active",
-					"ui-droppable-hover": "ui-state-hover"
-				},
-
-				drop: function(event, ui){
-					$(ui.draggable).draggable('disable');
-					$(ui.draggable).appendTo(fieldElements[i]);
-					var id = $(ui.draggable)[0];
-					var num = parseInt(id.parentNode.id.split("-")[1]) - 1;
-					var currentCard = me.hand.splice(num,1);
-					me.field[i] = currentCard;
-					console.log(JSON.stringify(me.field[i]));
-					display();
-					myAttack();
-				}
-			});
+			$("#hand-" + (i + 1) + " .background").draggable({revert: "invalid", snap: true, snapMode: "inner"});
+			dropper(i);
 		}
 	}
 
 	function opponentPlace(){	
-
 		opponentAttack();
-
 	}
 
 	function myAttack(){
@@ -273,10 +254,10 @@ $(document).ready(function(){
 			var myCard = me.field[i];
 			var opponentCard = opponent.field[i];
 			if(myCard !== null && myCard !== undefined){
-				var position = myCard.offset();
-				myAnimation(position.left, position.top);
-				setTimeOut(myAnimation(position.left, position.top),300);
-				setTimeOut(myAnimation(position.left, position.top),300);
+				var position = fieldElements[i].offset();
+				myAnimation(position.left + 75, position.top);
+				myAnimation(position.left + 75, position.top);
+				myAnimation(position.left + 75, position.top);
 				if(opponentCard != null){
 					opponentCard.health -= myCard.attack;
 					if(opponentCard.health <= 0){
@@ -320,6 +301,26 @@ $(document).ready(function(){
   		background(0, 0, 0, 25);
   		var mySwirl = new Swirly(x, y);
   		fireworks.push(mySwirl);
+	}
+
+
+	function dropper(i){
+		fieldElements[i].droppable({
+			classes:{
+				"ui-droppable-active": "ui-state-active",
+				"ui-droppable-hover": "ui-state-hover"
+			},
+
+			drop: function(event, ui){
+				$(ui.draggable).draggable('disable');
+				var id = $(ui.draggable)[0];
+				var num = parseInt(id.parentNode.id.split("-")[1]) - 1;
+				var currentCard = me.hand.splice(num,1);
+				me.field[i] = currentCard[0];
+				display();
+				myAttack();
+			}
+		});
 	}
 });
 
