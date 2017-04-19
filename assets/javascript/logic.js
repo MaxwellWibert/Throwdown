@@ -161,27 +161,17 @@ $(document).ready(function(){
 	opponentElements[2] = $("#opponent-3");
 	opponentElements[3] = $("#opponent-4");
 
-	function myTurn(){		
-		display();
-		myPlace();
-		myAttack();
-		display();
-		if(opponent.health <= 0){
-			onGameWin();
-		}else{
-			opponentTurn();
-		}
-	}
-
+	
 	display();
-	myTurn();
+	myPlace();
+	
 
 
 	function displayHand(){
 		for(var i = 0; i<4; i++){
 			handElements[i].empty();
 			var background = $('<div class="background">');
-			if(me.hand[i] !== null){
+			if(me.hand[i] !== null && me.hand[i] !== undefined){
 				background.append(me.hand[i].createElement());
 				var overlay = $('<div class="overlay">');
 				overlay.html('<h4>' + me.hand[i].name + '</h4> <p>Health: ' +me.hand[i].health + ' Attack: ' + me.hand[i].attack + '</p>');
@@ -199,15 +189,17 @@ $(document).ready(function(){
 		for(var i = 0; i<4; i++){
 			fieldElements[i].empty();
 			var background = $('<div class="background">');
+			console.log(me.field[i]);
 			if(me.field[i] !== null && me.field[i] !== undefined){
 				background.append(me.field[i].createElement());
 				var overlay = $('<div class="overlay">');
-				overlay.html('<h4>' + me.field[i].name + '</h4> <p>Health: ' +me.field[i].health + ' Attack: ' + me.field[i].attack + '</p>');
+				overlay.html('<h4>' + me.field[i].name + '</h4> <p>Health: ' + me.field[i].health + ' Attack: ' + me.field[i].attack + '</p>');
 				background.append(overlay);
 			}else{
 				var overlay = $('<div class="placeholder">');
 				overlay.html('<h4>My Field</h4>');
 				background.append(overlay);
+				console.log("yaddayadda", me.field[i]);
 			}
 			fieldElements[i].append(background);
 		}
@@ -232,22 +224,9 @@ $(document).ready(function(){
 	}
 
 	function display(){
-		displayOpponent();
 		displayField();
+		displayOpponent();
 		displayHand();
-	}
-
-
-	function opponentTurn(){
-		display();
-		opponentPlace();
-		opponentAttack();
-		display();
-		if(me.health <= 0){
-			onGameLose();
-		}else{
-			myTurn();
-		}
 	}
 
 
@@ -261,20 +240,31 @@ $(document).ready(function(){
 
 	function myPlace(){
 		for(var i = 0; i<4; i++){
-			handElements[i].draggable({revert: "invalid"});
+			$("#hand-" + (i + 1) + " .background").draggable({revert: "invalid", snap: "ui-widget-header"});
 			fieldElements[i].droppable({
 				classes:{
 					"ui-droppable-active": "ui-state-active",
 					"ui-droppable-hover": "ui-state-hover"
 				},
+
 				drop: function(event, ui){
-					console.log($(this));
+					$(ui.draggable).draggable('disable');
+					$(ui.draggable).appendTo(fieldElements[i]);
+					var id = $(ui.draggable)[0];
+					var num = parseInt(id.parentNode.id.split("-")[1]) - 1;
+					var currentCard = me.hand.splice(num,1);
+					me.field[i] = currentCard;
+					console.log(JSON.stringify(me.field[i]));
+					display();
+					myAttack();
 				}
 			});
 		}
 	}
 
-	function opponentPlace(){
+	function opponentPlace(){	
+
+		opponentAttack();
 
 	}
 
@@ -298,6 +288,7 @@ $(document).ready(function(){
 				}
 			}
 		}
+		opponentPlace();
 	}
 
 	function opponentAttack(){
@@ -319,7 +310,9 @@ $(document).ready(function(){
 					me.health -= opponentCard.attack;
 				}
 			}
-		}	
+		}
+
+		myPlace();	
 	}
 
 	function myAnimation(x, y){
