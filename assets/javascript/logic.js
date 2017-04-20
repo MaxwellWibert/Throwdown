@@ -286,7 +286,7 @@ $(document).ready(function(){
 		if(opponent.health > 0){
 			setTimeout(opponentPlace, 1000);
 		}else{
-			onGameWin();
+			setTimeout(onGameWin, 3000);
 		}
 		
 	}
@@ -315,7 +315,7 @@ $(document).ready(function(){
 		if(me.health > 0){
 			myPlace();
 		}else{
-			onGameLose();
+			setTimeout(onGameLose, 3000);
 		}
 		
 	}
