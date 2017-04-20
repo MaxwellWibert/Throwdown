@@ -8,7 +8,6 @@ function Particle(x, y, hue, firework, swirly, isUp){
   
   if (this.firework) {
     this.vel = createVector(0, -10*this.isUp);
-    console.log(this.isUp);
   } else if(this.swirly){
     this.vel = 0;
   } else {

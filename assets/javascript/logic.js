@@ -1,4 +1,6 @@
 $(document).ready(function(){
+	console.log("INSTRUCTIONS: First, choose your character from the confirm dialog box. There are 3 rows of slots for cards. The top row is your enemy's field. The middle row is your field. The bottom row (which might only be visible by scrolling down) is your hand. Each player has 15 cards in their deck. At the beginning of the game, 4 cards are loaded from the deck into your hand. Every turn, you must either drag a card into an empty field slot, or on top of the card in a filled field slot. You will then automatically draw a new card from the deck into your hand. Every card in your field will then attack the enemy field slot above it. If the slot is filled, your card will deal its specified damage value to the card in the slot. If the slot is empty, or if the damage overflows the health value of a card, the opposing player will be damaged directly. If the opposing player's health reaches zero, you Win!");
+
 	var me;
 	var opponent;
 
@@ -162,7 +164,7 @@ $(document).ready(function(){
 
 	
 	display();
-	myPlace();
+	setTimeout(myPlace, 3000);
 	
 
 
@@ -236,17 +238,24 @@ $(document).ready(function(){
 	}
 
 	function myPlace(){
+		console.log("Me: " + me.health, "Opponent:" + opponent.health);
+		textSlot = "Your Turn";
+		setTimeout(resetText, 2000);
 		for(var i = 0; i<4; i++){
 			$("#hand-" + (i + 1) + " .background").draggable({revert: "invalid", snap: true, snapMode: "inner"});
 			dropper(i);
 		}
 	}
 
-	function opponentPlace(){	
+	function opponentPlace(){
+		console.log("Me: " + me.health, "Opponent:" + opponent.health);
+		textSlot = "Opponent's Turn";
+		setTimeout(resetText, 2000);
 		var source = randomNum(0,3);
 		var target = randomNum(0,3);
 		var currentCard = opponent.hand.splice(source,1);
 		opponent.field[target] = currentCard[0];
+		opponent.hand.push(opponent.Deck.cards.pop());
 		display();
 		opponentAttack();
 	}
@@ -262,6 +271,7 @@ $(document).ready(function(){
 				myAnimation(position.left + 75, position.top, 1);
 				myAnimation(position.left + 75, position.top, 1);
 				if(opponentCard != null){
+					display();
 					opponentCard.health -= myCard.attack;
 					if(opponentCard.health <= 0){
 						opponent.health += opponentCard.health;
@@ -273,7 +283,12 @@ $(document).ready(function(){
 			}
 		}
 		display();
-		setTimeout(opponentPlace, 1000);
+		if(opponent.health > 0){
+			setTimeout(opponentPlace, 1000);
+		}else{
+			onGameWin();
+		}
+		
 	}
 
 	function opponentAttack(){
@@ -286,6 +301,7 @@ $(document).ready(function(){
 				myAnimation(position.left + 75, position.top +225, -1);
 				myAnimation(position.left + 75, position.top +225, -1);
 				if(myCard != null){
+					display();
 					myCard.health -= opponentCard.attack;
 					if(myCard.health <= 0){
 						me.health += myCard.health;
@@ -296,8 +312,12 @@ $(document).ready(function(){
 				}
 			}
 		}
-
-		myPlace();	
+		if(me.health > 0){
+			myPlace();
+		}else{
+			onGameLose();
+		}
+		
 	}
 
 	function myAnimation(x, y, isUp){
@@ -320,12 +340,14 @@ $(document).ready(function(){
 				var id = $(ui.draggable)[0];
 				var num = parseInt(id.parentNode.id.split("-")[1]) - 1;
 				var currentCard = me.hand.splice(num,1);
+				me.hand.push(me.Deck.cards.pop());
 				me.field[i] = currentCard[0];
 				display();
 				myAttack();
 			}
 		});
 	}
+
 });
 
 
