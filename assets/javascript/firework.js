@@ -1,8 +1,9 @@
-function Firework(x, y, hue){
+function Firework(x, y, hue, isUp){
   this.hue = hue;
-  this.firework = new Particle(x, y, this.hue, true, false);
+  this.firework = new Particle(x, y, this.hue, true, false, isUp);
   this.exploded = false;
   this.particles = [];
+  this.isUp = isUp;
   
   this.done = function() {
     if(this.exploded && this.particles.length === 0){
@@ -14,10 +15,14 @@ function Firework(x, y, hue){
   
   this.update = function() {
     if(!this.exploded){
+
+
+      gravity.mult(isUp);
       this.firework.applyForce(gravity);
       this.firework.update();
+      gravity.mult(isUp);
       
-      if (this.firework.vel.y >= 0){
+      if (Math.abs(this.firework.vel.y) <= 0.005){
         this.exploded = true;
         this.explode();
       }

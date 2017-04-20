@@ -1,10 +1,11 @@
-function Swirly(x, y){
+function Swirly(x, y, isUp){
   this.hue = random(255);
   this.x = x;
   this.y = y;
   this.converged = false;
   this.particles = [];
   this.radius = 200;
+  this.isUp = isUp;
   
   this.num = 2*random(4,8);
   for(var i = 0; i < this.num; i++){
@@ -23,7 +24,7 @@ function Swirly(x, y){
   this.update = function(){
     if(this.radius <= 0){
       this.converged = true;
-      var firework = new Firework(this.x, this.y, this.hue);
+      var firework = new Firework(this.x, this.y, this.hue, this.isUp);
       fireworks.push(firework);
     }
     this.radius -=5;

@@ -1,12 +1,14 @@
-function Particle(x, y, hue, firework, swirly){
+function Particle(x, y, hue, firework, swirly, isUp){
   this.pos = createVector(x,y);
   this.firework = firework;
   this.lifespan = 255;
   this.hue = hue;
   this.acc = createVector(0,0);
+  this.isUp = isUp;
   
   if (this.firework) {
-    this.vel = createVector(0, -10);
+    this.vel = createVector(0, -10*this.isUp);
+    console.log(this.isUp);
   } else if(this.swirly){
     this.vel = 0;
   } else {

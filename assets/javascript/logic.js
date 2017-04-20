@@ -134,7 +134,6 @@ $(document).ready(function(){
 	}
 	//each hand drawn from new deck
 	for(var i = 3; i>=0; i--){
-		//console.log(me.Deck.cards);
 		var card = me.Deck.cards.pop();
 		me.hand.push(card);
 		opponent.hand.push(opponent.Deck.cards.pop());
@@ -189,7 +188,6 @@ $(document).ready(function(){
 		for(var i = 0; i<4; i++){
 			fieldElements[i].empty();
 			var background = $('<div class="background">');
-			console.log(me.field[i]);
 			if(me.field[i] !== null && me.field[i] !== undefined){
 				background.append(me.field[i].createElement());
 				var overlay = $('<div class="overlay">');
@@ -199,7 +197,6 @@ $(document).ready(function(){
 				var overlay = $('<div class="placeholder">');
 				overlay.html('<h4>My Field</h4>');
 				background.append(overlay);
-				console.log("yaddayadda", me.field[i]);
 			}
 			fieldElements[i].append(background);
 		}
@@ -246,18 +243,24 @@ $(document).ready(function(){
 	}
 
 	function opponentPlace(){	
+		var source = randomNum(0,3);
+		var target = randomNum(0,3);
+		var currentCard = opponent.hand.splice(source,1);
+		opponent.field[target] = currentCard[0];
+		display();
 		opponentAttack();
 	}
 
 	function myAttack(){
+		display();
 		for(var i = 0; i<4; i++){
 			var myCard = me.field[i];
 			var opponentCard = opponent.field[i];
 			if(myCard !== null && myCard !== undefined){
 				var position = fieldElements[i].offset();
-				myAnimation(position.left + 75, position.top);
-				myAnimation(position.left + 75, position.top);
-				myAnimation(position.left + 75, position.top);
+				myAnimation(position.left + 75, position.top, 1);
+				myAnimation(position.left + 75, position.top, 1);
+				myAnimation(position.left + 75, position.top, 1);
 				if(opponentCard != null){
 					opponentCard.health -= myCard.attack;
 					if(opponentCard.health <= 0){
@@ -269,7 +272,8 @@ $(document).ready(function(){
 				}
 			}
 		}
-		opponentPlace();
+		display();
+		setTimeout(opponentPlace, 1000);
 	}
 
 	function opponentAttack(){
@@ -277,10 +281,10 @@ $(document).ready(function(){
 			var myCard = me.field[i];
 			var opponentCard = opponent.field[i];
 			if(opponentCard != null){
-				var position = opponentCard.offset();
-				myAnimation(position.left, position.top);
-				setTimeOut(myAnimation(position.left, position.top),300);
-				setTimeOut(myAnimation(position.left, position.top),300);
+				var position = opponentElements[i].offset();
+				myAnimation(position.left + 75, position.top +225, -1);
+				myAnimation(position.left + 75, position.top +225, -1);
+				myAnimation(position.left + 75, position.top +225, -1);
 				if(myCard != null){
 					myCard.health -= opponentCard.attack;
 					if(myCard.health <= 0){
@@ -296,10 +300,10 @@ $(document).ready(function(){
 		myPlace();	
 	}
 
-	function myAnimation(x, y){
+	function myAnimation(x, y, isUp){
 		colorMode(RGB);
   		background(0, 0, 0, 25);
-  		var mySwirl = new Swirly(x, y);
+  		var mySwirl = new Swirly(x, y, isUp);
   		fireworks.push(mySwirl);
 	}
 
